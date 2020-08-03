@@ -3,6 +3,8 @@ import json
 import hashlib
 import pickle
 
+import copy
+
 import numpy as np
 
 from nsmr.envs.consts import *
@@ -105,7 +107,7 @@ class NSMR(object):
 
     def get_lidar(self, pose=None):
         if pose is None:
-            pose = self.pose.copy()
+            pose = copy.deepcopy(self.pose)
         pose[0] += self.lidar_pos_noise[0]
         pose[1] += self.lidar_pos_noise[1]
         pose[2] += self.lidar_pos_noise[2]

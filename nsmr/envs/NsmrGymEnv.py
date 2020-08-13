@@ -66,8 +66,8 @@ class NsmrGymEnv(gym.Env):
 
         return observation, reward, done, info
 
-    def render(self, mode='human'):
-        self.renderer.render(self.nsmr, mode)
+    def render(self, target, mode='human'):
+        self.renderer.render(self.nsmr, mode, target)
 
     def get_observation(self):
         observation = {}
@@ -77,18 +77,18 @@ class NsmrGymEnv(gym.Env):
 
     def get_reward(self, observation):
         dis = observation["target"][0]
-        ddis = self.pre_dis - dis
+        #ddis = self.pre_dis - dis
         theta = np.arccos(observation["target"][2])
-        if dis < ROBOT_RADIUS:
-            reward = self.reward_params["goal_reward"]
-            self.goal = True
-        elif self.nsmr.is_collision():
-            reward = -self.reward_params["collision_penalty"]
-        else:
-            reward = self.reward_params["alpha"] * ddis
-        if abs(ddis) < 1e-6:
-            reward -= self.reward_params["stop_penalty"]
-        reward -= self.reward_params["beta"]/(2*np.pi)*abs(theta)
+        #if dis < ROBOT_RADIUS:
+        #    reward = self.reward_params["goal_reward"]
+        #    self.goal = True
+        #elif self.nsmr.is_collision():
+        #    reward = -self.reward_params["collision_penalty"]
+        #else:
+        #    reward = self.reward_params["alpha"] * ddis
+        #if abs(ddis) < 1e-6:
+        #    reward -= self.reward_params["stop_penalty"]
+        reward = -(dis + abs(theta)/(2*np.pi))
         self.pre_dis = dis
         return reward
     

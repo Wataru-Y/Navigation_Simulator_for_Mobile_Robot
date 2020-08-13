@@ -12,7 +12,7 @@ class Renderer(object):
         self.screen_width = int(world_width_x*self.scale)
         self.screen_height = int(world_width_y*self.scale)
 
-    def render(self, state, mode):
+    def render(self, state, mode, target_pose):
         from gym.envs.classic_control import rendering
         if self.viewer is None:
             self.viewer = rendering.Viewer(self.screen_width, self.screen_height)
@@ -38,6 +38,12 @@ class Renderer(object):
             target.add_attr(self.target_trans)
             target.set_color(1.0,0.0,0.0)
             self.viewer.add_geom(target)
+            #subgoal
+            subgoal = rendering.make_circle(ROBOT_RADIUS*0.3*self.scale)
+            self.subgoal_trans = rendering.Transform()
+            subgoal.add_attr(self.target_trans)
+            subgoal.set_color(0.0,1.0,0.0)
+            self.viewer.add_geom(subgoal)
             #obstract
             for obj in state.layout["static_objects"]:
                 l, r, t, b = self.get_lrtb(obj["l"],obj["r"],obj["t"],obj["b"])
@@ -51,7 +57,8 @@ class Renderer(object):
         self.robot_trans.set_translation(robot_x, robot_y)
         self.orientation_trans.set_translation(robot_x,robot_y)
         self.orientation_trans.set_rotation(robot_orientation)
-        self.target_trans.set_translation((state.target[0]+self.margin)*self.scale,(state.target[1]+self.margin)*self.scale)
+        self.target_trans.set_translation((target_pose[0]+self.margin)*self.scale,(target_pose[1]+self.margin)*self.scale)
+        self.subgoal_trans.set_translation((state.target[0]+self.margin)*self.scale,(state.target[1]+self.margin)*self.scale)
         if state.obs is not None:
             for i in range(int(len(state.obs))):
                 if i%self.SKIP_RENDER == 0:

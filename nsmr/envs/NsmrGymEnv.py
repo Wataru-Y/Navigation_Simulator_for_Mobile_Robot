@@ -55,7 +55,7 @@ class NsmrGymEnv(gym.Env):
         self.pre_dis = observation["target"][0]
         self.goal = False
         return observation
-    
+
     def step(self, action):
         self.t += 1
         self.nsmr.update(action)
@@ -77,7 +77,7 @@ class NsmrGymEnv(gym.Env):
 
     def get_reward(self, observation):
         dis = observation["target"][0]
-        #ddis = self.pre_dis - dis
+        ddis = self.pre_dis - dis
         theta = np.arccos(observation["target"][2])
         #if dis < ROBOT_RADIUS:
         #    reward = self.reward_params["goal_reward"]
@@ -91,7 +91,7 @@ class NsmrGymEnv(gym.Env):
         reward = -(dis + abs(theta)/(2*np.pi))
         self.pre_dis = dis
         return reward
-    
+
     def is_done(self):
         done = False
         if self.t >= MAX_STEPS:

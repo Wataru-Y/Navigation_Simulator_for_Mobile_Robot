@@ -88,7 +88,7 @@ class NsmrGymEnv(gym.Env):
         #    reward = self.reward_params["alpha"] * ddis
         #if abs(ddis) < 1e-6:
         #    reward -= self.reward_params["stop_penalty"]
-        reward = -(dis + abs(theta)/(2*np.pi))
+        reward = dis - 0.5*abs(theta)/(2*np.pi))
         self.pre_dis = dis
         return reward
 

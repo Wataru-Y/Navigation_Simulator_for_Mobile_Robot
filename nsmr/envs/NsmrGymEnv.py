@@ -72,25 +72,15 @@ class NsmrGymEnv(gym.Env):
     def get_observation(self):
         observation = {}
         observation["lidar"] = self.nsmr.get_lidar()
-        observation["target"] = self.nsmr.get_relative_target_position()
+        #observation["target"] = self.nsmr.get_relative_target_position()
+        observation["target"] = self.nsmr.get_subgoal()
         return observation
 
     def get_reward(self, observation):
-        dis = observation["target"][0]
-        ddis = self.pre_dis - dis
-        theta = np.arccos(observation["target"][2])
-        #if dis < ROBOT_RADIUS:
-        #    reward = self.reward_params["goal_reward"]
-        #    self.goal = True
-        #elif self.nsmr.is_collision():
-        #    reward = -self.reward_params["collision_penalty"]
-        #else:
-        #    reward = self.reward_params["alpha"] * ddis
-        #if abs(ddis) < 1e-6:
-        #    reward -= self.reward_params["stop_penalty"]
-        reward = 0.3*dis - 0.01*abs(theta)/(2*np.pi)
-        self.pre_dis = dis
-        return reward
+        theta = np.arctan2(observation["target"][2], observation["target"][3])
+        reward = np.sqrt(observation["target"][0]**2 + observation["target"][1]**2 + theta**2)
+        self.reward = reward
+        return -reward
 
     def is_done(self):
         done = False
@@ -99,6 +89,9 @@ class NsmrGymEnv(gym.Env):
         if self.nsmr.is_collision():
             done = True
         if self.goal:
+            done = True
+        if self.reward < 0.2:
+            print("Subgoal!")
             done = True
         return done
 

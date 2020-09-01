@@ -130,6 +130,17 @@ class NSMR(object):
         theta = np.arctan2((target[1]-pose[1]),(target[0]-pose[0]))
         theta = self.angle_diff(theta, pose[2])
         return np.array([dis, np.sin(theta), np.cos(theta)])
+    
+    def get_subgoal(self, pose=None, target=None):
+        if pose is None:
+            pose = self.pose
+        if target is None:
+            target = self.target
+        #dis = self.get_dis(target, pose)
+        x = target[0]-pose[0]
+        y = target[1]-pose[1]
+        theta = self.angle_diff(target[2], pose[2])
+        return np.array([x, y, np.sin(theta), np.cos(theta)])
 
     def angle_normalize(self, z):
         return np.arctan2(np.sin(z), np.cos(z))

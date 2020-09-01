@@ -52,7 +52,7 @@ class NsmrGymEnv(gym.Env):
         self.nsmr.reset_pose()
         self.nsmr.reset_noise_param()
         observation = self.get_observation()
-        self.pre_dis = observation["target"][0]
+        #self.pre_dis = observation["target"][0]
         self.goal = False
         return observation
 

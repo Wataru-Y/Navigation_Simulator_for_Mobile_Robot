@@ -51,8 +51,8 @@ class NsmrGymEnv(gym.Env):
         self.t = 0
         self.nsmr.reset_pose()
         self.nsmr.reset_noise_param()
-        observation = self.get_observation()
-        #self.pre_dis = observation["target"][0]
+        observation = self.get_observation_()
+        self.pre_dis = observation["target"][0]
         self.goal = False
         return observation
 
@@ -74,6 +74,13 @@ class NsmrGymEnv(gym.Env):
         observation["lidar"] = self.nsmr.get_lidar()
         #observation["target"] = self.nsmr.get_relative_target_position()
         observation["target"] = self.nsmr.get_subgoal()
+        return observation
+    
+    def get_observation_(self):
+        observation = {}
+        observation["lidar"] = self.nsmr.get_lidar()
+        observation["target"] = self.nsmr.get_relative_target_position()
+        #observation["target"] = self.nsmr.get_subgoal()
         return observation
 
     def get_reward(self, observation):

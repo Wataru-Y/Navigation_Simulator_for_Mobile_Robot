@@ -76,7 +76,7 @@ class NsmrGymEnv(gym.Env):
         #observation["target"] = self.nsmr.get_relative_target_position()
         observation["target"] = self.nsmr.get_subgoal()
         return observation
-    
+
     def get_observation_(self):
         observation = {}
         observation["lidar"] = self.nsmr.get_lidar()
@@ -96,8 +96,8 @@ class NsmrGymEnv(gym.Env):
             done = True
         if self.nsmr.is_collision():
             done = True
-        if self.goal:
-            done = True
+        #if self.goal:
+        #    done = True
         if self.reward < 0.2:
             print("Subgoal!")
             done = True

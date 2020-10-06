@@ -54,6 +54,7 @@ class NsmrGymEnv(gym.Env):
         observation = self.get_observation_()
         self.pre_dis = observation["target"][0]
         self.goal = False
+        self.final_target = self.nsmr.target
         return observation
 
     def step(self, action):
@@ -84,8 +85,8 @@ class NsmrGymEnv(gym.Env):
         return observation
 
     def get_reward(self, observation):
-        theta = np.arctan2(observation["target"][2], observation["target"][3])
-        reward = np.sqrt(observation["target"][0]**2 + observation["target"][1]**2 + theta**2)
+        theta = np.arctan2(observation["target"][2], observation["target"][3]) / np.pi
+        reward = np.sqrt((observation["target"][0]/4)**2 + (observation["target"][1]/4)**2 + theta**2)
         self.reward = reward
         return -reward
 

@@ -38,18 +38,18 @@ class Renderer(object):
             target.add_attr(self.target_trans)
             target.set_color(1.0,0.0,0.0)
             self.viewer.add_geom(target)
-            #subgoal
-            subgoal = rendering.make_circle(ROBOT_RADIUS*0.3*self.scale)
-            self.subgoal_trans = rendering.Transform()
-            subgoal.add_attr(self.target_trans)
-            subgoal.set_color(0.0,1.0,0.0)
-            self.viewer.add_geom(subgoal)
             #obstract
             for obj in state.layout["static_objects"]:
                 l, r, t, b = self.get_lrtb(obj["l"],obj["r"],obj["t"],obj["b"])
                 ob = rendering.FilledPolygon([(l,b),(l,t),(r,t),(r,b)])
                 ob.set_color(0,0,0)
                 self.viewer.add_geom(ob)
+            #subgoal
+            subgoal = rendering.make_circle(ROBOT_RADIUS*0.3*self.scale)
+            self.subgoal_trans = rendering.Transform()
+            subgoal.add_attr(self.subgoal_trans)
+            subgoal.set_color(0.0,1.0,0.0)
+            self.viewer.add_geom(subgoal)
 
         robot_x = (self.margin + state.pose[0]) * self.scale
         robot_y = (self.margin + state.pose[1]) * self.scale

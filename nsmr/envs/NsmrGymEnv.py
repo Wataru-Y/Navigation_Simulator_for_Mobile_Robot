@@ -86,8 +86,9 @@ class NsmrGymEnv(gym.Env):
 
     def get_reward(self, observation):
         theta = np.arctan2(observation["target"][2], observation["target"][3]) / np.pi
-        reward = np.sqrt((observation["target"][0])**2 + (observation["target"][1])**2 + theta**2)
+        reward = np.sqrt((observation["target"][0]/2)**2 + (observation["target"][1]/2)**2 + theta**2)
         self.reward = reward
+        #print(reward)
         return -reward
 
     def is_done(self):
@@ -98,7 +99,7 @@ class NsmrGymEnv(gym.Env):
             done = True
         #if self.goal:
         #    done = True
-        if self.reward < 0.2:
+        if self.reward < 0.1:
             print("Subgoal!")
             done = True
         return done

@@ -86,7 +86,7 @@ class NsmrGymEnv(gym.Env):
 
     def get_reward(self, observation):
         theta = np.arctan2(observation["target"][2], observation["target"][3])
-        reward = np.sqrt((observation["target"][0])**2 + (observation["target"][1])**2 + theta**2)
+        reward = np.sqrt((observation["target"][0])**2 + (observation["target"][1])**2 + (theta/np.pi)**2)
         self.reward = reward
         #print(reward)
         return -reward

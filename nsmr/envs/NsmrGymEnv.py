@@ -90,7 +90,7 @@ class NsmrGymEnv(gym.Env):
         #theta2 = np.arctan2(relative_target[1], relative_target[2])
         #reward = 0.1 * np.sqrt((observation["target"][0])**2 + (observation["target"][1])**2 + (theta)**2)
         reward = 2 * relative_target[0] + 0.5*np.abs(theta)/np.pi
-        print(relative_target[0], np.abs(theta)/np.pi)
+        #print(relative_target[0], np.abs(theta)/np.pi)
         self.reward = reward
         #print(reward)
         return -reward

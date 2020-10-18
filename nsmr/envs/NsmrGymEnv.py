@@ -90,7 +90,7 @@ class NsmrGymEnv(gym.Env):
         relative_target = self.nsmr.get_relative_target_position()
         #theta2 = np.arctan2(relative_target[1], relative_target[2])
         #reward = 0.1 * np.sqrt((observation["target"][0])**2 + (observation["target"][1])**2 + (theta)**2)
-        reward = relative_target[0] + np.abs(self.theta)/np.pi
+        reward = relative_target[0] + 0.1 * np.abs(self.theta)/np.pi
         #print(relative_target[0], np.abs(theta)/np.pi)
         self.reward = reward
         #print(reward)
@@ -98,7 +98,6 @@ class NsmrGymEnv(gym.Env):
 
     def is_done(self, observation):
         done = False
-        
         if self.t >= MAX_STEPS:
             done = True
         if self.nsmr.is_collision():
@@ -106,7 +105,7 @@ class NsmrGymEnv(gym.Env):
         #if self.goal:
         #    done = True
         #if self.reward < 0.5:
-        if self.nsmr.get_relative_target_position()[0] < 0.2 and np.rad2deg(np.abs(self.theta)) < 1:
+        if self.nsmr.get_relative_target_position()[0] < 0.2 and np.rad2deg(np.abs(self.theta)) < 5:
             print("Subgoal!")
             done = True
         return done

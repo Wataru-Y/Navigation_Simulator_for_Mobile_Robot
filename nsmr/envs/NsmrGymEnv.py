@@ -66,7 +66,7 @@ class NsmrGymEnv(gym.Env):
         done = self.is_done(observation)
         info = {"pose": self.nsmr.pose, "target": self.nsmr.target}
 
-        return observation, reward, done, info
+        return observation, self.reward, done, info
 
     def render(self, target, mode='human'):
         self.renderer.render(self.nsmr, mode, target)
@@ -91,8 +91,11 @@ class NsmrGymEnv(gym.Env):
         #theta2 = np.arctan2(relative_target[1], relative_target[2])
         #reward = 0.1 * np.sqrt((observation["target"][0])**2 + (observation["target"][1])**2 + (theta)**2)
         reward = relative_target[0] + 0.1 * np.abs(self.theta)/np.pi
+        if(relative_target[0] - self.pre_dis>0.05):
+            reward -= 0.05
         #print(relative_target[0], np.abs(theta)/np.pi)
         self.reward = reward
+        self.pre_dis = relative_target[0]
         #print(reward)
         return -reward
 
@@ -107,6 +110,7 @@ class NsmrGymEnv(gym.Env):
         #if self.reward < 0.5:
         if self.nsmr.get_relative_target_position()[0] < 0.2 and np.rad2deg(np.abs(self.theta)) < 5:
             print("Subgoal!")
+            self.reward = 0
             done = True
         return done
 

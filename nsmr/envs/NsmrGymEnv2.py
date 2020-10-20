@@ -7,7 +7,7 @@ from nsmr.envs.consts import *
 from nsmr.envs.renderer import Renderer
 from nsmr.envs.nsmr import NSMR
 
-class NsmrGymEnv(gym.Env):
+class NsmrGymEnv2(gym.Env):
     def __init__(self,
                  layout=SIMPLE_MAP,
                  reward_params={"goal_reward": 5.0,
@@ -75,7 +75,7 @@ class NsmrGymEnv(gym.Env):
         observation = {}
         observation["lidar"] = self.nsmr.get_lidar()
         #observation["target"] = self.nsmr.get_relative_target_position()
-        observation["target"] = self.nsmr.get_subgoal()
+        observation["target"] = self.nsmr.get_subgoal2()
         return observation
 
     def get_observation_(self):
@@ -86,11 +86,11 @@ class NsmrGymEnv(gym.Env):
         return observation
 
     def get_reward(self, observation):
-        self.theta = np.arctan2(observation["target"][2], observation["target"][3])
+        #self.theta = np.arctan2(observation["target"][2], observation["target"][3])
         relative_target = self.nsmr.get_relative_target_position()
-        #theta2 = np.arctan2(relative_target[1], relative_target[2])
+        theta2 = np.arctan2(relative_target[1], relative_target[2])
         #reward = 0.1 * np.sqrt((observation["target"][0])**2 + (observation["target"][1])**2 + (theta)**2)
-        reward = relative_target[0] #+ 0.1 * np.abs(self.theta)/np.pi
+        reward = relative_target[0] + abs(theta2)/np.pi
         if(relative_target[0] - self.pre_dis>1e-6):
             reward -= 0.05
         #print(relative_target[0], np.abs(theta)/np.pi)

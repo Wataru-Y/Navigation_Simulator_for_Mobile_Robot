@@ -62,7 +62,7 @@ class NsmrGymEnv(gym.Env):
         self.t += 1
         self.nsmr.update(action)
         observation = self.get_observation()
-        reward = self.get_reward(observation)
+        self.reward = self.get_reward(observation)
         done = self.is_done(observation)
         info = {"pose": self.nsmr.pose, "target": self.nsmr.target}
 
@@ -94,7 +94,7 @@ class NsmrGymEnv(gym.Env):
         if(relative_target[0] - self.pre_dis>0.05):
             reward -= 0.05
         #print(relative_target[0], np.abs(theta)/np.pi)
-        self.reward = reward
+        #self.reward = reward
         self.pre_dis = relative_target[0]
         #print(reward)
         return -reward

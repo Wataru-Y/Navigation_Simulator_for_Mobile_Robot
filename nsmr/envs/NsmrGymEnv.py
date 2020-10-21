@@ -86,11 +86,11 @@ class NsmrGymEnv(gym.Env):
         return observation
 
     def get_reward(self, observation):
-        self.theta = np.arctan2(observation["target"][2], observation["target"][3])
+        #self.theta = np.arctan2(observation["target"][2], observation["target"][3])
         relative_target = self.nsmr.get_relative_target_position()
-        #theta2 = np.arctan2(relative_target[1], relative_target[2])
+        theta2 = np.arctan2(relative_target[1], relative_target[2])
         #reward = 0.1 * np.sqrt((observation["target"][0])**2 + (observation["target"][1])**2 + (theta)**2)
-        reward = relative_target[0] #+ 0.1 * np.abs(self.theta)/np.pi
+        reward = relative_target[0] + np.abs(theta2)/np.pi
         if(relative_target[0] - self.pre_dis>1e-6):
             reward -= 0.05
         #print(relative_target[0], np.abs(theta)/np.pi)

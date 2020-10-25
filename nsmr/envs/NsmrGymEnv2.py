@@ -65,7 +65,7 @@ class NsmrGymEnv2(gym.Env):
         self.reward = self.get_reward(observation)
         done = self.is_done(observation)
         info = {"pose": self.nsmr.pose, "target": self.nsmr.target}
-
+        print(self.reward)
         return observation, self.reward, done, info
 
     def render(self, target, mode='human'):
@@ -111,7 +111,7 @@ class NsmrGymEnv2(gym.Env):
         #if self.nsmr.get_relative_target_position()[0] < 0.2 and np.rad2deg(np.abs(self.theta)) < 5:
         if self.nsmr.get_relative_target_position()[0] < 0.2:
             print("Subgoal!")
-            #self.reward = 0
+            self.reward += 5
             done = True
         return done
 

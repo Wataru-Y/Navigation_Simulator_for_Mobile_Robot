@@ -61,6 +61,7 @@ class NsmrGymEnv2(gym.Env):
     def step(self, action):
         self.t += 1
         self.pre_pose = self.nsmr.pose
+        self.pre_dis = self.nsmr.get_relative_target_position()[0]
         self.nsmr.update(action)
         observation = self.get_observation()
         self.reward = self.get_reward(observation)
@@ -89,17 +90,23 @@ class NsmrGymEnv2(gym.Env):
     def get_reward(self, observation):
         #self.theta = np.arctan2(observation["target"][2], observation["target"][3])
         relative_target = self.nsmr.get_relative_target_position()
-        ddis = self.nsmr.get_relative_target_position(self.pre_pose, self.nsmr.pose)[0]
+        #ddis = self.nsmr.get_relative_target_position(self.pre_pose, self.nsmr.pose)[0]
+        ddis = self.pre_dis - relative_target[0]
         theta2 = np.arctan2(relative_target[1], relative_target[2])
         #reward = 0.1 * np.sqrt((observation["target"][0])**2 + (observation["target"][1])**2 + (theta)**2)
-        reward = 5 * relative_target[0] + 0.1 * abs(theta2)/(2*np.pi)
-        if(ddis<1e-6):
-            reward -= 0.5
+        reward = 0
+
+        if self.nsmr.get_relative_target_position()[0] < ROBOT_RADIUS:
+            reward += 5
+        else:
+            reward += 0.15 * ddis + 0.01 * abs(theta2)/(2*np.pi)
+        
+        if(abs(ddis)<1e-6):
+                reward -= 0.05
         #print(relative_target[0], np.abs(theta)/np.pi)
         #self.reward = reward
-        self.pre_dis = relative_target[0]
         #print(reward)
-        return -reward
+        return reward
 
     def is_done(self, observation):
         done = False
@@ -111,9 +118,8 @@ class NsmrGymEnv2(gym.Env):
         #    done = True
         #if self.reward < 0.5:
         #if self.nsmr.get_relative_target_position()[0] < 0.2 and np.rad2deg(np.abs(self.theta)) < 5:
-        if self.nsmr.get_relative_target_position()[0] < 0.2:
+        if self.nsmr.get_relative_target_position()[0] < ROBOT_RADIUS:
             print("Subgoal!")
-            self.reward = 50
             done = True
         return done
 

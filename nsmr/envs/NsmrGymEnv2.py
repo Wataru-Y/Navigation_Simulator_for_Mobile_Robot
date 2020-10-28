@@ -101,8 +101,8 @@ class NsmrGymEnv2(gym.Env):
         else:
             reward += 0.15 * ddis + 0.01 * abs(theta2)/(2*np.pi)
         
-        if(abs(ddis)<1e-6):
-                reward -= 0.05
+        #if(abs(ddis)<1e-6):
+        #        reward -= 0.05
         #print(relative_target[0], np.abs(theta)/np.pi)
         #self.reward = reward
         #print(reward)

@@ -119,7 +119,6 @@ class NsmrGymEnv2(gym.Env):
         #if self.reward < 0.5:
         #if self.nsmr.get_relative_target_position()[0] < 0.2 and np.rad2deg(np.abs(self.theta)) < 5:
         if self.nsmr.get_relative_target_position()[0] < ROBOT_RADIUS:
-            print("Subgoal!")
             done = True
         return done
 

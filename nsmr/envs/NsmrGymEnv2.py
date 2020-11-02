@@ -96,16 +96,15 @@ class NsmrGymEnv2(gym.Env):
         #reward = 0.1 * np.sqrt((observation["target"][0])**2 + (observation["target"][1])**2 + (theta)**2)
         reward = 0
 
-        if self.nsmr.get_relative_target_position()[0] < ROBOT_RADIUS:
+        if relative_target[0] < ROBOT_RADIUS:
             reward += 5
         else:
             reward += 0.15 * ddis + 0.01 * abs(theta2)/(2*np.pi)
         
         if(abs(ddis)<1e-6):
                 reward -= 0.05
-        #print(relative_target[0], np.abs(theta)/np.pi)
-        #self.reward = reward
-        #print(reward)
+        self.pre_dis = relative_target[0]
+        
         return reward
 
     def is_done(self, observation):

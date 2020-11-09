@@ -3,7 +3,7 @@ import argparse
 import numpy as np
 import gym
 
-from nsmr.envs import NsmrGymEnv
+from nsmr.envs import NsmrGymEnv2
 
 if __name__ == "__main__":
     print("Navigation Simulator for Mobile Robot")
@@ -14,7 +14,7 @@ if __name__ == "__main__":
     parser.add_argument('--no_render', action='store_true')
     args = parser.parse_args()
 
-    env = gym.make("nsmr-v0")
+    env = gym.make("nsmr2-v0")
     env.set_layout(args.layout)
 
     for i_episode in range(args.max_episodes):
@@ -23,7 +23,7 @@ if __name__ == "__main__":
         ep_r = 0
         for t in range(args.max_steps):
             if(not args.no_render):
-                env.render()
+                env.render(env.nsmr.target)
             action = env.action_space.sample()
             observation, reward, done, info = env.step(action)
             ep_r += reward

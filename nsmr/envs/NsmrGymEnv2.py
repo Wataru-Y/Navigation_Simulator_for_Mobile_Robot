@@ -56,6 +56,7 @@ class NsmrGymEnv2(gym.Env):
         self.goal = False
         self.final_target = self.nsmr.target
         self.theta = 0
+        self.init_pose = self.nsmr.pose
         return observation
 
     def step(self, action):
@@ -102,7 +103,7 @@ class NsmrGymEnv2(gym.Env):
             reward += 0.15 * ddis + 0.01 * abs(theta2)/(2*np.pi)
         
         if(abs(ddis)<1e-6):
-                reward -= 0.05
+            reward -= 0.05
         self.pre_dis = relative_target[0]
         
         return reward
@@ -111,13 +112,13 @@ class NsmrGymEnv2(gym.Env):
         done = False
         if self.t >= MAX_STEPS:
             done = True
-        if self.nsmr.is_collision():
+        elif self.nsmr.is_collision():
             done = True
         #if self.goal:
         #    done = True
         #if self.reward < 0.5:
         #if self.nsmr.get_relative_target_position()[0] < 0.2 and np.rad2deg(np.abs(self.theta)) < 5:
-        if self.nsmr.get_relative_target_position()[0] < ROBOT_RADIUS:
+        elif self.nsmr.get_relative_target_position()[0] < ROBOT_RADIUS:
             done = True
         return done
 

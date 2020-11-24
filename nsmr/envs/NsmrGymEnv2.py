@@ -35,6 +35,7 @@ class NsmrGymEnv2(gym.Env):
 
         # reward params
         self.reward_params = reward_params
+        self.mode='rgb_array'
 
         self.reset()
 
@@ -73,7 +74,7 @@ class NsmrGymEnv2(gym.Env):
         return observation, self.reward, done, info
 
     def render(self, target, mode='human'):
-        self.renderer.render(self.nsmr, mode, target)
+        self.renderer.render(self.nsmr, self.mode, target)
 
     def get_observation(self):
         observation = {}

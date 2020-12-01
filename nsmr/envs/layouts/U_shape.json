@@ -1,0 +1,7 @@
+{
+    "dimention_x": 1000,
+    "dimention_y": 1000,
+    "static_objects": [
+        {"type":"Block", "l":0, "r":750, "t":250, "b":750}
+    ]
+}
